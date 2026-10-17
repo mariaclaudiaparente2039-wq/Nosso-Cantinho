@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff5fa">
+  <title>Nosso Cantinho 💗</title>
+  <style>
+    :root {
+      --pink: #d96ba4;
+      --pink-dark: #a8457c;
+      --pink-light: #fff0f7;
+      --lavender: #8f78cf;
+      --lavender-light: #f1edff;
+      --ink: #49364d;
+      --muted: #806d83;
+      --white: #fff;
+      --good: #238653;
+      --bad: #c7465b;
+      --shadow: 0 12px 32px rgba(118, 74, 120, .12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, #ffe3f0 0, transparent 34rem),
+        radial-gradient(circle at 100% 10%, #e9e2ff 0, transparent 32rem),
+        #fffafd;
+      font-family: ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+    button { font: inherit; cursor: pointer; }
+    .app { max-width: 760px; min-height: 100vh; margin: 0 auto; padding: 20px 16px 104px; }
+    header { text-align: center; padding: 18px 8px 12px; }
+    .eyebrow { color: var(--pink-dark); font-size: .78rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 800; }
+    h1 { font-size: clamp(1.8rem, 6vw, 2.65rem); line-height: 1.1; margin: 8px 0; }
+    .subtitle { margin: 0 auto; max-width: 32rem; color: var(--muted); line-height: 1.55; }
+    .page { display: none; animation: fadeIn .22s ease; }
+    .page.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    .card { background: rgba(255,255,255,.88); border: 1px solid #f4dfec; border-radius: 24px; padding: 22px; margin: 14px 0; box-shadow: var(--shadow); }
+    .hero-art { min-height: 185px; display: grid; place-items: center; text-align: center; background: linear-gradient(135deg, #ffe7f2, #eee8ff); border-radius: 22px; overflow: hidden; }
+    .heart-art { font-size: clamp(4rem, 18vw, 7rem); filter: drop-shadow(0 8px 12px #d78db855); animation: float 3s ease-in-out infinite; }
+    @keyframes float { 50% { transform: translateY(-7px) rotate(3deg); } }
+    h2 { margin: 0 0 10px; font-size: 1.35rem; }
+    h3 { margin: 0 0 8px; font-size: 1.04rem; }
+    p { line-height: 1.6; }
+    .muted { color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+    .stat { text-align: center; padding: 18px 10px; border-radius: 18px; background: var(--pink-light); }
+    .stat:nth-child(2) { background: var(--lavender-light); }
+    .stat-number { display: block; font-size: 1.8rem; font-weight: 850; color: var(--pink-dark); }
+    .stat-label { font-size: .82rem; color: var(--muted); }
+    .field { display: grid; gap: 7px; margin: 12px 0; }
+    label { font-weight: 700; font-size: .9rem; }
+    input, textarea { width: 100%; border: 1px solid #e8d8e8; background: #fff; border-radius: 13px; padding: 12px 13px; font: inherit; color: var(--ink); }
+    textarea { min-height: 88px; resize: vertical; }
+    .btn { border: 0; border-radius: 14px; padding: 13px 16px; font-weight: 750; transition: transform .12s, filter .12s; }
+    .btn:active { transform: scale(.98); }
+    .btn-primary { color: #fff; background: linear-gradient(100deg, var(--pink), var(--lavender)); box-shadow: 0 7px 16px #ba78b333; }
+    .btn-soft { color: var(--pink-dark); background: var(--pink-light); border: 1px solid #f2d4e5; }
+    .btn-whatsapp { color: white; background: #20b965; width: 100%; }
+    .btn-block { width: 100%; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+    .button-row .btn { flex: 1; }
+    .quiz-options { display: grid; gap: 10px; margin: 16px 0; }
+    .quiz-option { width: 100%; text-align: left; color: var(--ink); background: white; border: 1px solid #e8d9ed; border-radius: 14px; padding: 14px; }
+    .quiz-option:focus-visible, .btn:focus-visible, .nav-btn:focus-visible { outline: 3px solid #aa8de8; outline-offset: 3px; }
+    .quiz-option.correct { background: #e5f8ed; border-color: #64bd88; color: #176a3c; }
+    .quiz-option.wrong { background: #fff0f0; border-color: #e48a98; color: #9c2d43; }
+    .feedback { min-height: 28px; font-weight: 750; }
+    .heart-burst { position: fixed; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+    .burst-heart { position: absolute; left: 50%; top: 54%; font-size: var(--size, 2rem); animation: heartExplode var(--duration, 1.8s) cubic-bezier(.12,.7,.2,1) forwards; filter: drop-shadow(0 3px 5px #d96ba455); }
+    @keyframes heartExplode { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.2) rotate(0deg); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.15) rotate(var(--rot)); } }
+    @media (prefers-reduced-motion: reduce) { .burst-heart { animation-duration: .7s; } }
+    .envelopes { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+    .envelope { min-height: 128px; padding: 13px 7px; background: linear-gradient(150deg, #fff0f7, #f0eaff); border: 1px solid #ecd7ee; border-radius: 17px; color: var(--pink-dark); font-weight: 750; }
+    .envelope span { display: block; font-size: 2rem; margin-bottom: 8px; }
+    .result-box { padding: 16px; background: var(--lavender-light); border-radius: 16px; margin-top: 14px; }
+    .bottom-nav { position: fixed; z-index: 10; bottom: 0; left: 0; right: 0; padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.94); border-top: 1px solid #eeddec; backdrop-filter: blur(14px); }
+    .nav-inner { max-width: 760px; margin: auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; }
+    .nav-btn { border: 0; background: transparent; border-radius: 14px; padding: 8px 2px 6px; color: #87758c; font-size: .75rem; font-weight: 750; }
+    .nav-btn .nav-icon { display: block; font-size: 1.35rem; margin-bottom: 3px; }
+    .nav-btn.active { color: var(--pink-dark); background: var(--pink-light); }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 30; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(45, 28, 53, .48); }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(100%, 440px); max-height: 82vh; overflow: auto; background: white; border-radius: 24px; padding: 24px; box-shadow: 0 24px 70px #24112b44; animation: fadeIn .18s ease; }
+    .modal-close { float: right; border: 0; border-radius: 50%; background: var(--pink-light); color: var(--pink-dark); width: 38px; height: 38px; font-size: 1.25rem; }
+    .small-note { font-size: .82rem; color: var(--muted); }
+    footer { text-align: center; margin: 22px 0 0; color: var(--muted); font-size: .8rem; }
+    @media (max-width: 420px) {
+      .app { padding: 12px 12px 100px; }
+      .card { padding: 17px; border-radius: 20px; }
+      .envelopes { grid-template-columns: 1fr; }
+      .envelope { min-height: 76px; display: flex; align-items: center; text-align: left; gap: 12px; padding: 12px 16px; }
+      .envelope span { margin: 0; }
+      .nav-btn { font-size: .68rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="eyebrow">feito com carinho 💗</div>
+      <h1 id="appTitle">Nosso Cantinho</h1>
+      <p class="subtitle" id="headerSubtitle">Um pequeno universo feito especialmente para você.</p>
+    </header>
+
+    <section class="page active" id="home" aria-labelledby="homeTitle">
+      <div class="card">
+        <div class="hero-art" aria-label="Ilustração de dois corações">
+          <div>
+            <div class="heart-art">💗</div>
+            <p style="margin:0 0 15px;font-weight:800">Nossa história está só começando...</p>
+          </div>
+        </div>
+        <h2 id="homeTitle" style="margin-top:20px">Oi, meu bem! ✨</h2>
+        <p id="welcomeText">Preparei esse cantinho para te lembrar que você deixa meus dias mais bonitos. Espero que cada pedacinho daqui te faça sorrir.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-number" id="daysTogether">—</span>
+            <span class="stat-label">dias desde nossa data 💞</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" id="countdown">✨</span>
+            <span class="stat-label" id="countdownLabel">nosso próximo encontro</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Um recadinho para você 💌</h2>
+        <p id="littleNote">Não precisamos ter todas as fotos do mundo para guardar algo especial. Podemos começar criando nossas lembranças, uma de cada vez.</p>
+        <button class="btn btn-whatsapp" id="whatsappButton">☘ Conversar comigo no WhatsApp</button>
+        <p class="small-note">O botão abre uma conversa no WhatsApp. Você poderá revisar a mensagem antes de enviar.</p>
+      </div>
+    </section>
+
+    <section class="page" id="quiz" aria-labelledby="quizTitle">
+      <div class="card">
+        <h2 id="quizTitle">Quiz de descobertas ✨</h2>
+        <p class="muted">Vamos descobrir o quanto a gente já sabe um do outro!</p>
+        <div id="quizArea"></div>
+        <div class="feedback" id="quizFeedback" aria-live="polite"></div>
+        <div class="button-row">
+          <button class="btn btn-primary btn-block" id="nextQuestion" hidden>Próxima pergunta →</button>
+          <button class="btn btn-soft btn-block" id="restartQuiz" hidden>Jogar de novo ↻</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="letters" aria-labelledby="lettersTitle">
+      <div class="card">
+        <h2 id="lettersTitle">Cartas de saudade 💌</h2>
+        <p class="muted">Escolha uma cartinha. Ela foi feita para um momento diferente.</p>
+        <div class="envelopes">
+          <button class="envelope" data-letter="saudade"><span>💌</span>Se estiver com saudade</button>
+          <button class="envelope" data-letter="dificil"><span>🌷</span>Se o dia foi difícil</button>
+          <button class="envelope" data-letter="amor"><span>💗</span>Para lembrar que te amo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="roulette" aria-labelledby="rouletteTitle">
+      <div class="card" style="text-align:center">
+        <div style="font-size:3.6rem;margin:5px 0 12px" id="rouletteEmoji">🎡</div>
+        <h2 id="rouletteTitle">Roleta do encontro virtual</h2>
+        <p class="muted">Sem saber o que fazer hoje? Deixa a sorte escolher uma ideia para nós.</p>
+        <button class="btn btn-primary btn-block" id="spinButton">Sortear nosso plano 💫</button>
+        <div class="result-box" id="rouletteResult" aria-live="polite">Nossa próxima aventura pode aparecer aqui...</div>
+      </div>
+    </section>
+
+    <section class="page" id="settings" aria-labelledby="settingsTitle">
+      <div class="card">
+        <h2 id="settingsTitle">Personalizar nosso cantinho ⚙️</h2>
+        <p class="muted">Altere os dados abaixo. As mudanças ficam salvas neste navegador.</p>
+        <div class="field">
+          <label for="herName">Como você chama ela?</label>
+          <input id="herName" placeholder="Ex.: princesa, meu bem...">
+        </div>
+        <div class="field">
+          <label for="startDate">Data para contar os dias</label>
+          <input id="startDate" type="date">
+        </div>
+        <div class="field">
+          <label for="meetDate">Data e hora do próximo encontro (opcional)</label>
+          <input id="meetDate" type="datetime-local">
+        </div>
+        <div class="field">
+          <label for="yourNumber">Seu WhatsApp com código do país e DDD</label>
+          <input id="yourNumber" inputmode="tel" placeholder="Ex.: 5587999999999">
+        </div>
+        <div class="field">
+          <label for="customMessage">Mensagem de boas-vindas</label>
+          <textarea id="customMessage"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" id="saveSettings">Salvar personalização 💗</button>
+        <p class="small-note">Não digite +, espaços ou traços no número do WhatsApp. Exemplo brasileiro: 55 + DDD + número.</p>
+      </div>
+    </section>
+
+    <footer>Um cantinho pequeno, feito com muito carinho. 💗</footer>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navegação principal">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-page="home"><span class="nav-icon">🏡</span>Início</button>
+      <button class="nav-btn" data-page="quiz"><span class="nav-icon">✨</span>Quiz</button>
+      <button class="nav-btn" data-page="letters"><span class="nav-icon">💌</span>Cartas</button>
+      <button class="nav-btn" data-page="roulette"><span class="nav-icon">🎡</span>Roleta</button>
+    </div>
+  </nav>
+
+  <div class="modal-backdrop" id="letterModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="closeModal" aria-label="Fechar">×</button>
+      <div style="font-size:2.4rem;margin-bottom:8px">💗</div>
+      <h2 id="modalTitle">Uma cartinha para você</h2>
+      <p id="modalMessage"></p>
+      <button class="btn btn-primary btn-block" id="modalOk">Guardar carinho no coração 💕</button>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================================
+    // PERSONALIZE AQUI: nomes, mensagens, perguntas e atividades
+    // ==========================================================
+    const CONFIG = {
+      appTitle: "Nosso Cantinho",
+      herName: "meu bem",
+      startDate: "", // Formato: AAAA-MM-DD. Também pode ser preenchida em Personalizar.
+      meetDate: "",  // Formato: AAAA-MM-DDTHH:MM. Opcional.
+      whatsappNumber: "", // Exemplo: 5587999999999 (sem +, espaços ou traços)
+      welcomeMessage: "Preparei esse cantinho para te lembrar que você deixa meus dias mais bonitos. Espero que cada pedacinho daqui te faça sorrir.",
+      letters: {
+        saudade: {
+          title: "Quando bater a saudade 💌",
+          message: "Se a saudade aparecer, lembra que existe alguém pensando em você com um sorriso bobo. Queria poder estar pertinho agora, mas, enquanto isso, fica aqui meu abraço em forma de palavras. 💗"
+        },
+        dificil: {
+          title: "Se o dia foi difícil 🌷",
+          message: "Respira um pouquinho. Você não precisa resolver tudo de uma vez, nem ser forte o tempo inteiro. Espero que amanhã seja mais leve. Estou torcendo por você e quero te ver bem. ✨"
+        },
+        amor: {
+          title: "Só para você lembrar 💗",
+          message: "Eu gosto de conhecer cada pedacinho seu, das conversas bobas aos assuntos sérios. Ainda temos muita coisa para descobrir, e acho bonito pensar em todas as lembranças que podemos construir daqui para frente. ❤️"
+        }
+      },
+      quiz: [
+        {
+          question: "Qual dessas coisas é uma ótima ideia para fazermos juntos?",
+          options: ["Assistir a um filme e comentar", "Ficar olhando para a parede", "Disputar quem dorme primeiro sem avisar", "Fazer uma reunião sobre boletos"],
+          answer: 0,
+          correct: "Acertou! Já temos um plano de cinema 💗",
+          wrong: "Quase! Mas um filminho juntinhos parece melhor, né? 😄"
+        },
+        {
+          question: "O que este cantinho quer te lembrar?",
+          options: ["Que você precisa estudar mais", "Que foi feito pensando em você", "Que a roleta manda em tudo", "Que corações são quadrados"],
+          answer: 1,
+          correct: "Isso! Cada detalhe foi pensado com carinho 💌",
+          wrong: "Errou, mas te perdoo! A resposta certa é: fiz isso pensando em você. 🥹"
+        },
+        {
+          question: "Qual é a melhor forma de criar lembranças?",
+          options: ["Esperar a vida inteira", "Nunca sair da rotina", "Viver momentos simples juntos", "Fazer uma prova surpresa"],
+          answer: 2,
+          correct: "Acertou! Os momentos simples também viram histórias lindas ✨",
+          wrong: "Resposta romântica desbloqueada: criar momentos simples juntos 💕"
+        },
+        {
+          question: "Agora a pergunta mais importante… quer namorar comigo? 🥹💗",
+          options: ["Sim! 💖", "Com certeza! 💍", "Não 💔"],
+          proposal: true
+        }
+      ],
+      activities: [
+        { emoji: "🎬", title: "Cinema a dois", description: "Escolham um filme, preparem algo gostoso e assistam juntos por chamada." },
+        { emoji: "🎧", title: "Playlist compartilhada", description: "Cada um escolhe três músicas e conta por que escolheu cada uma." },
+        { emoji: "🎮", title: "Desafio de jogo", description: "Escolham um jogo online e inventem uma prenda divertida para quem perder." },
+        { emoji: "💬", title: "Perguntas que aproximam", description: "Façam cinco perguntas curiosas para se conhecerem melhor." },
+        { emoji: "🌙", title: "Chamada tranquila", description: "Conversem sem pressa sobre como foi o dia de cada um." },
+        { emoji: "🍿", title: "Lanche sincronizado", description: "Preparem o mesmo lanche e façam uma mini chamada de encontro." },
+        { emoji: "😂", title: "Troca de memes", description: "Cada um manda os três memes que mais representam o próprio dia." }
+      ]
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const safeStore = {
+      get(key, fallback = "") {
+        try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
+      },
+      set(key, value) {
+        try { localStorage.setItem(key, value); } catch {}
+      }
+    };
+
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => page.classList.toggle("active", page.id === pageId));
+      document.querySelectorAll(".nav-btn").forEach(button => button.classList.toggle("active", button.dataset.page === pageId));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    document.querySelectorAll(".nav-btn").forEach(button => button.addEventListener("click", () => showPage(button.dataset.page)));
+
+    function loadSettings() {
+      $("appTitle").textContent = CONFIG.appTitle;
+      $("herName").value = safeStore.get("herName", CONFIG.herName);
+      $("startDate").value = safeStore.get("startDate", CONFIG.startDate);
+      $("meetDate").value = safeStore.get("meetDate", CONFIG.meetDate);
+      $("yourNumber").value = safeStore.get("whatsappNumber", CONFIG.whatsappNumber);
+      $("customMessage").value = safeStore.get("welcomeMessage", CONFIG.welcomeMessage);
+      updateHome();
+    }
+    function saveSettings() {
+      safeStore.set("herName", $("herName").value.trim() || CONFIG.herName);
+      safeStore.set("startDate", $("startDate").value);
+      safeStore.set("meetDate", $("meetDate").value);
+      safeStore.set("whatsappNumber", $("yourNumber").value.replace(/\D/g, ""));
+      safeStore.set("welcomeMessage", $("customMessage").value.trim() || CONFIG.welcomeMessage);
+      updateHome();
+      alert("Personalização salva neste navegador! 💗");
+      showPage("home");
+    }
+    $("saveSettings").addEventListener("click", saveSettings);
+
+    function updateHome() {
+      const name = safeStore.get("herName", CONFIG.herName).trim() || CONFIG.herName;
+      $("homeTitle").textContent = `Oi, ${name}! ✨`;
+      $("welcomeText").textContent = safeStore.get("welcomeMessage", CONFIG.welcomeMessage);
+      const start = safeStore.get("startDate", CONFIG.startDate);
+      if (start) {
+        const startDate = new Date(`${start}T00:00:00`);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const days = Math.floor((today - startDate) / 86400000);
+        $("daysTogether").textContent = days >= 0 ? days : "♡";
+      } else {
+        $("daysTogether").textContent = "♡";
+      }
+      const meet = safeStore.get("meetDate", CONFIG.meetDate);
+      if (meet) {
+        const target = new Date(meet).getTime();
+        const diff = target - Date.now();
+        if (Number.isFinite(target) && diff > 0) {
+          const days = Math.floor(diff / 86400000);
+          const hours = Math.floor((diff % 86400000) / 3600000);
+          $("countdown").textContent = `${days}d ${hours}h`;
+          $("countdownLabel").textContent = "faltam para nosso encontro";
+        } else {
+          $("countdown").textContent = "💗";
+          $("countdownLabel").textContent = "que bom se já nos vimos!";
+        }
+      } else {
+        $("countdown").textContent = "✨";
+        $("countdownLabel").textContent = "nosso próximo encontro";
+      }
+    }
+
+    $("whatsappButton").addEventListener("click", () => {
+      const number = safeStore.get("whatsappNumber", CONFIG.whatsappNumber).replace(/\D/g, "");
+      const name = safeStore.get("herName", CONFIG.herName);
+      const message = `Oi! Passei pelo nosso cantinho e lembrei de você, ${name} 💗`;
+      if (!number) {
+        showPage("settings");
+        alert("Adicione seu número de WhatsApp na aba Personalizar primeiro. 💚");
+        return;
+      }
+      window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    });
+
+    // Quiz
+    let quizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+    function renderQuestion() {
+      const area = $("quizArea");
+      $("quizFeedback").textContent = "";
+      $("nextQuestion").hidden = true;
+      $("restartQuiz").hidden = true;
+      quizAnswered = false;
+      if (quizIndex >= CONFIG.quiz.length) {
+        area.innerHTML = `<div class="result-box"><h3>Fim do quiz! 🎉</h3><p>Você acertou <strong>${quizScore}</strong> de <strong>${CONFIG.quiz.length}</strong> perguntas.</p><p>${quizScore === CONFIG.quiz.length ? "Perfeita! Você merece um abraço demorado. 💗" : "O mais importante é continuarmos descobrindo coisas um sobre o outro. 🥹"}</p></div>`;
+        $("restartQuiz").hidden = false;
+        return;
+      }
+      const q = CONFIG.quiz[quizIndex];
+      area.innerHTML = `<p class="small-note">Pergunta ${quizIndex + 1} de ${CONFIG.quiz.length}</p><h3>${q.question}</h3><div class="quiz-options">${q.options.map((option, i) => `<button class="quiz-option" data-option="${i}">${String.fromCharCode(65+i)}. ${option}</button>`).join("")}</div>`;
+      area.querySelectorAll(".quiz-option").forEach(button => button.addEventListener("click", () => answerQuestion(Number(button.dataset.option), button)));
+    }
+    function answerQuestion(choice, button) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const q = CONFIG.quiz[quizIndex];
+      const buttons = $("quizArea").querySelectorAll(".quiz-option");
+      buttons.forEach(b => b.disabled = true);
+      if (q.proposal) {
+        button.classList.add(choice === 2 ? "wrong" : "correct");
+        $("nextQuestion").hidden = true;
+        $("restartQuiz").hidden = false;
+        $("restartQuiz").textContent = "Jogar de novo ↻";
+        if (choice === 0 || choice === 1) {
+          $("quizFeedback").textContent = choice === 0
+            ? "AAAAA, você fez meu coração explodir de felicidade! 💗🥹"
+            : "COM CERTEZA É A MELHOR RESPOSTA DO UNIVERSO! 💍💖";
+          $("quizFeedback").style.color = "var(--pink-dark)";
+          createHeartExplosion();
+          const result = document.createElement("div");
+          result.className = "result-box";
+          result.innerHTML = "<h3>Temos um novo capítulo! 💞</h3><p>Obrigado por me dar esse sorriso bobo. Quero construir isso com carinho, respeito e muitos momentos felizes com você. 💗</p>";
+          $("quizArea").appendChild(result);
+        } else {
+          $("quizFeedback").textContent = "Tudo bem. 💗 Obrigado por ser sincera comigo. Meu coração vai precisar de um curativo imaginário, mas respeito seu tempo e sua resposta.";
+          $("quizFeedback").style.color = "var(--bad)";
+        }
+        return;
+      }
+      if (choice === q.answer) {
+        quizScore++;
+        button.classList.add("correct");
+        $("quizFeedback").textContent = q.correct;
+        $("quizFeedback").style.color = "var(--good)";
+      } else {
+        button.classList.add("wrong");
+        buttons[q.answer].classList.add("correct");
+        $("quizFeedback").textContent = q.wrong;
+        $("quizFeedback").style.color = "var(--bad)";
+      }
+      $("nextQuestion").hidden = false;
+    }
+    function createHeartExplosion() {
+      const burst = document.createElement("div");
+      burst.className = "heart-burst";
+      burst.setAttribute("aria-hidden", "true");
+      const hearts = ["💗", "💖", "💕", "💘", "❤️", "💝", "💞", "✨"];
+      for (let i = 0; i < 34; i++) {
+        const heart = document.createElement("span");
+        heart.className = "burst-heart";
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        const angle = (Math.PI * 2 * i) / 34 + (Math.random() - .5) * .35;
+        const distance = 110 + Math.random() * Math.min(window.innerWidth * .42, 300);
+        heart.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        heart.style.setProperty("--dy", `${Math.sin(angle) * distance - 35}px`);
+        heart.style.setProperty("--rot", `${Math.round(Math.random() * 100 - 50)}deg`);
+        heart.style.setProperty("--size", `${1.1 + Math.random() * 1.7}rem`);
+        heart.style.setProperty("--duration", `${1.25 + Math.random() * .9}s`);
+        burst.appendChild(heart);
+      }
+      document.body.appendChild(burst);
+      window.setTimeout(() => burst.remove(), 2500);
+    }
+    $("nextQuestion").addEventListener("click", () => { quizIndex++; renderQuestion(); });
+    $("restartQuiz").addEventListener("click", () => { quizIndex = 0; quizScore = 0; $("restartQuiz").textContent = "Jogar de novo ↻"; renderQuestion(); });
+    renderQuestion();
+
+    // Cartas e modal
+    function openLetter(key) {
+      const letter = CONFIG.letters[key];
+      if (!letter) return;
+      $("modalTitle").textContent = letter.title;
+      $("modalMessage").textContent = letter.message;
+      $("letterModal").classList.add("open");
+      $("modalOk").focus();
+    }
+    document.querySelectorAll("[data-letter]").forEach(button => button.addEventListener("click", () => openLetter(button.dataset.letter)));
+    function closeModal() { $("letterModal").classList.remove("open"); }
+    $("closeModal").addEventListener("click", closeModal);
+    $("modalOk").addEventListener("click", closeModal);
+    $("letterModal").addEventListener("click", (event) => { if (event.target === $("letterModal")) closeModal(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModal(); });
+
+    // Roleta
+    $("spinButton").addEventListener("click", () => {
+      const activity = CONFIG.activities[Math.floor(Math.random() * CONFIG.activities.length)];
+      $("rouletteEmoji").textContent = activity.emoji;
+      $("rouletteResult").innerHTML = `<h3>${activity.title}</h3><p>${activity.description}</p>`;
+    });
+
+    loadSettings();
+  </script>
+</body>
+</html>
