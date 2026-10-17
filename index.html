@@ -74,8 +74,11 @@
     .burst-heart { position: absolute; left: 50%; top: 54%; font-size: var(--size, 2rem); animation: heartExplode var(--duration, 1.8s) cubic-bezier(.12,.7,.2,1) forwards; filter: drop-shadow(0 3px 5px #d96ba455); }
     @keyframes heartExplode { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.2) rotate(0deg); } 12% { opacity: 1; } 100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.15) rotate(var(--rot)); } }
     @media (prefers-reduced-motion: reduce) { .burst-heart { animation-duration: .7s; } }
-    .envelopes { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
-    .envelope { min-height: 128px; padding: 13px 7px; background: linear-gradient(150deg, #fff0f7, #f0eaff); border: 1px solid #ecd7ee; border-radius: 17px; color: var(--pink-dark); font-weight: 750; }
+    .envelopes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .envelope { min-height: 145px; padding: 13px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: linear-gradient(150deg, #fff0f7, #f0eaff); border: 1px solid #ecd7ee; border-radius: 17px; color: var(--pink-dark); font-weight: 750; text-align: center; box-shadow: 0 5px 14px #ba78b31a; transition: transform .15s, box-shadow .15s; }
+    .envelope:hover { transform: translateY(-2px); box-shadow: 0 8px 18px #ba78b326; }
+    .envelope strong { font-size: .9rem; }
+    .envelope small { color: var(--muted); font-weight: 600; font-size: .78rem; line-height: 1.35; }
     .envelope span { display: block; font-size: 2rem; margin-bottom: 8px; }
     .result-box { padding: 16px; background: var(--lavender-light); border-radius: 16px; margin-top: 14px; }
     .bottom-nav { position: fixed; z-index: 10; bottom: 0; left: 0; right: 0; padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); background: rgba(255,255,255,.94); border-top: 1px solid #eeddec; backdrop-filter: blur(14px); }
@@ -85,7 +88,8 @@
     .nav-btn.active { color: var(--pink-dark); background: var(--pink-light); }
     .modal-backdrop { position: fixed; inset: 0; z-index: 30; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(45, 28, 53, .48); }
     .modal-backdrop.open { display: flex; }
-    .modal { width: min(100%, 440px); max-height: 82vh; overflow: auto; background: white; border-radius: 24px; padding: 24px; box-shadow: 0 24px 70px #24112b44; animation: fadeIn .18s ease; }
+    .modal { width: min(100%, 540px); max-height: 82vh; overflow: auto; background: white; border-radius: 24px; padding: 24px; box-shadow: 0 24px 70px #24112b44; animation: fadeIn .18s ease; }
+    #modalMessage { white-space: pre-line; line-height: 1.8; }
     .modal-close { float: right; border: 0; border-radius: 50%; background: var(--pink-light); color: var(--pink-dark); width: 38px; height: 38px; font-size: 1.25rem; }
     .small-note { font-size: .82rem; color: var(--muted); }
     footer { text-align: center; margin: 22px 0 0; color: var(--muted); font-size: .8rem; }
@@ -93,8 +97,10 @@
       .app { padding: 12px 12px 100px; }
       .card { padding: 17px; border-radius: 20px; }
       .envelopes { grid-template-columns: 1fr; }
-      .envelope { min-height: 76px; display: flex; align-items: center; text-align: left; gap: 12px; padding: 12px 16px; }
-      .envelope span { margin: 0; }
+      .envelope { min-height: 78px; flex-direction: row; justify-content: flex-start; text-align: left; gap: 10px; padding: 12px 16px; }
+      .envelope span { margin: 0; font-size: 1.8rem; }
+      .envelope strong { min-width: 105px; }
+      .envelope small { text-align: left; }
       .nav-btn { font-size: .62rem; padding-left: 0; padding-right: 0; }
       .nav-btn .nav-icon { font-size: 1.2rem; }
     }
@@ -152,12 +158,16 @@
 
     <section class="page" id="letters" aria-labelledby="lettersTitle">
       <div class="card">
-        <h2 id="lettersTitle">Cartas de saudade 💌</h2>
-        <p class="muted">Escolha uma cartinha. Ela foi feita para um momento diferente.</p>
+        <h2 id="lettersTitle">Sete cartinhas para você 💌</h2>
+        <p class="muted">Uma para cada dia da semana. Você pode abrir na ordem ou ler todas de uma vez — cada envelope guarda um pedacinho da nossa história.</p>
         <div class="envelopes">
-          <button class="envelope" data-letter="saudade"><span>💌</span>Se estiver com saudade</button>
-          <button class="envelope" data-letter="dificil"><span>🌷</span>Se o dia foi difícil</button>
-          <button class="envelope" data-letter="amor"><span>💗</span>Para lembrar que te amo</button>
+          <button class="envelope" data-letter="segunda"><span>🌷</span><strong>Segunda-feira</strong><small>Como tudo começou</small></button>
+          <button class="envelope" data-letter="terca"><span>🫶</span><strong>Terça-feira</strong><small>O começo da nossa história</small></button>
+          <button class="envelope" data-letter="quarta"><span>💞</span><strong>Quarta-feira</strong><small>Os detalhes que amo</small></button>
+          <button class="envelope" data-letter="quinta"><span>✨</span><strong>Quinta-feira</strong><small>A mulher que admiro</small></button>
+          <button class="envelope" data-letter="sexta"><span>🐈</span><strong>Sexta-feira</strong><small>Meu lugar favorito</small></button>
+          <button class="envelope" data-letter="sabado"><span>🪻</span><strong>Sábado</strong><small>Um amor com segurança</small></button>
+          <button class="envelope" data-letter="domingo"><span>🧸</span><strong>Domingo</strong><small>A mulher que continuo escolhendo</small></button>
         </div>
       </div>
     </section>
@@ -236,18 +246,13 @@
       whatsappNumber: "", // Exemplo: 5587999999999 (sem +, espaços ou traços)
       welcomeMessage: "Preparei esse cantinho para te lembrar que você deixa meus dias mais bonitos. Espero que cada pedacinho daqui te faça sorrir.",
       letters: {
-        saudade: {
-          title: "Quando bater a saudade 💌",
-          message: "Se a saudade aparecer, lembra que existe alguém pensando em você com um sorriso bobo. Queria poder estar pertinho agora, mas, enquanto isso, fica aqui meu abraço em forma de palavras. 💗"
-        },
-        dificil: {
-          title: "Se o dia foi difícil 🌷",
-          message: "Respira um pouquinho. Você não precisa resolver tudo de uma vez, nem ser forte o tempo inteiro. Espero que amanhã seja mais leve. Estou torcendo por você e quero te ver bem. ✨"
-        },
-        amor: {
-          title: "Só para você lembrar 💗",
-          message: "Eu gosto de conhecer cada pedacinho seu, das conversas bobas aos assuntos sérios. Ainda temos muita coisa para descobrir, e acho bonito pensar em todas as lembranças que podemos construir daqui para frente. ❤️"
-        }
+        "segunda": { day: "Segunda-feira", emoji: "🌷", title: "O dia em que você entrou naquela sala 💗", message: "Meu amor,\n\nEu lembro de quando você saiu da sua turma e veio para a minha sala da faculdade. Naquele momento, a primeira coisa que pensei foi: “ela é linda”. Foi a primeira vez que me lembro de olhar para alguém daquele jeito, reparando assim, e isso ficou guardado em mim.\n\nDepois, comecei a perceber que você também parecia ser simpática. Com o tempo, fui descobrindo seu jeito engraçado, as coisas que você falava e essa forma tão sua de estar no mundo.\n\nÉ engraçado pensar que uma cena tão simples, que talvez parecesse comum para qualquer outra pessoa, acabou virando uma lembrança tão importante para mim. Eu não sabia o que viria depois, nem imaginava o espaço que você ia conquistar na minha vida.\n\nHoje, quando lembro daquele dia, sinto carinho pela versão de mim que ainda não sabia de nada — e que, sem perceber, estava começando a gostar de você. ❤️" },
+        "terca": { day: "Terça-feira", emoji: "🫶", title: "Se eu soubesse o que começaria naquele grupo… 💌", message: "Meu bem,\n\nEu já tinha te visto conversando com a minha mãe na faculdade, mas foi numa sexta-feira, quando você entrou na minha turma, que a gente começou a se aproximar de verdade. Eu te perguntei se podia fazer parte do seu grupo para um trabalho, e você aceitou.\n\nEu estava sem internet e precisava de ajuda para conferir uma resposta. Parece uma coisa pequena, né? Mas, às vezes, as histórias mais importantes começam de um jeito que a gente nem percebe.\n\nNa segunda-feira, você puxou assunto comigo. Eu te acompanhei até a pracinha para você esperar o ônibus, e aquele momento simples acabou virando mais uma parte da nossa história. Na terça-feira, você se declarou pelo WhatsApp — e o mais engraçado é que, sem querer, eu mesma acabei te ajudando a criar coragem para isso.\n\nNa quarta-feira, a gente decidiu dar uma chance para nós. Quando penso nessa sequência de dias, fico feliz por cada conversa, cada coincidência e cada pequeno passo que nos trouxe até aqui.\n\nNão foi uma cena de filme, com música tocando ao fundo. Foi a nossa vida acontecendo, do nosso jeito. E eu gosto muito de como a nossa história começou. 💗" },
+        "quarta": { day: "Quarta-feira", emoji: "💞", title: "Os detalhes seus que estão conquistando meu coração 💕", message: "Meu amor,\n\nTem tanta coisa em você que vai conquistando meu coração nos detalhes. Eu gosto do carinho que você demonstra quando estamos juntas, dos beijos, dos abraços e da sensação boa de ter você pertinho de mim.\n\nTambém reparo no jeito como você se preocupa comigo quando não estou bem. Às vezes você fica nervosa, mas eu consigo perceber que, por trás disso, existe cuidado. Você continua presente mesmo quando também está lidando com seus próprios problemas, e eu valorizo muito isso.\n\nEu acho lindo quando você se empolga debatendo alguma coisa, quando seus olhos parecem ganhar ainda mais vida e você defende o que acredita. Eu gosto de te ouvir e, quando percebo que você tem razão, quero reconhecer isso. Não preciso estar certa o tempo todo para que a gente fique bem.\n\nEu sei que também erro. Quero aprender a reconhecer melhor as minhas falhas e mostrar, nas minhas atitudes, que estou disposta a melhorar. Gostar de você também é querer cuidar do que estamos construindo.\n\nSão esses detalhes — os carinhosos, os engraçados, os intensos e até os que me fazem refletir — que fazem eu gostar cada vez mais de conhecer você. ❤️" },
+        "quinta": { day: "Quinta-feira", emoji: "✨", title: "A mulher que eu admiro 🌟", message: "Meu bem,\n\nQuero que você saiba que eu não admiro você só porque gosto de você. Eu admiro a pessoa que você é.\n\nAdmiro sua personalidade, sua inteligência e a forma como você defende aquilo em que acredita. Admiro como enfrenta as situações, como se dedica às coisas e como se esforça para fazer bem aquilo que precisa fazer. Seus trabalhos da faculdade são incríveis, e eu fico impressionada com a dedicação que você coloca neles.\n\nUma das coisas de que mais gosto é quando você me explica alguma coisa até eu entender. Nem todo mundo consegue me explicar de um jeito que faça sentido para mim, mas você tenta, tem paciência e encontra formas de me ajudar. Isso significa muito.\n\nSua inteligência aparece nos debates, nas conversas do dia a dia e até nos pequenos comentários que você faz. Gosto de ouvir seu raciocínio, de ver sua paixão por certos assuntos e de perceber o quanto você tem dentro de si.\n\nEspero que você nunca diminua a própria luz para caber na expectativa de ninguém. Eu quero continuar conhecendo essa mulher forte, inteligente, interessante e cheia de personalidade — e quero que você também consiga enxergar em si mesma tudo aquilo que eu admiro. 💗" },
+        "sexta": { day: "Sexta-feira", emoji: "🐈", title: "Meu lugar favorito é ao seu lado 🫶", message: "Meu amor,\n\nQuando penso nos momentos de que gosto com você, não lembro só de coisas grandes ou de ocasiões especiais. Lembro de momentos simples que ficaram importantes justamente porque você estava ali.\n\nLembro da gente sentada no banco da FASHUSC durante o intervalo, olhando os gatos. Principalmente de você achando eles fofos — e de como isso deixava tudo ainda mais bonitinho para mim. É uma lembrança pequena, mas consigo sentir o carinho dela quando penso nisso.\n\nTambém lembro da gente sentada no banco da pracinha, conversando enquanto você esperava o ônibus. A gente podia estar falando de qualquer coisa, sem precisar fazer nada extraordinário. Só estar ali, dividindo aquele tempinho, já era bom.\n\nAcho que é isso que quero guardar: não preciso que todo encontro seja perfeito, cheio de planos ou digno de uma foto. Eu gosto de quando a gente simplesmente existe no mesmo lugar, conversa, ri e divide um pedaço do dia.\n\nMeu lugar favorito não precisa ser um lugar específico. Muitas vezes, é só aquele cantinho em que você está sentada ao meu lado. 💗" },
+        "sabado": { day: "Sábado", emoji: "🪻", title: "Quero que você se sinta segura sendo você 🌷", message: "Meu bem,\n\nUma coisa que eu quero construir com você é um relacionamento em que a gente possa se sentir segura para ser quem é. Quero que você consiga confiar em mim, falar o que pensa e mostrar seus sentimentos sem achar que precisa esconder partes de si para ser amada.\n\nEu gosto da sua personalidade forte, de você ter opiniões próprias e defender aquilo em que acredita. Também gosto do seu lado carinhoso, do cuidado que demonstra e das maneiras, grandes ou pequenas, com que mostra o que sente. Não quero que você perca nada disso para tentar ser alguém que acha que eu gostaria mais.\n\nEu sei que confiança não se pede apenas com palavras: ela é construída com tempo, constância e atitudes. Quando eu errar, quero conseguir reconhecer o erro sem fugir da responsabilidade e trabalhar para fazer diferente. Não quero que minhas promessas sejam bonitas só no momento em que digo; quero que minhas ações ajudem você a se sentir segura.\n\nE você não precisa ser forte o tempo inteiro. Pode ter dias ruins, ficar cansada, ter dúvidas ou precisar de espaço. Quero aprender a te ouvir e respeitar o que você sente, mesmo quando eu não souber imediatamente como resolver alguma coisa.\n\nNão prometo acertar sempre, mas quero continuar aprendendo a cuidar de nós com respeito, sinceridade e carinho. Quero que você possa ser você mesma ao meu lado. ❤️" },
+        "domingo": { day: "Domingo", emoji: "🧸", title: "A mulher que eu amo e continuo escolhendo conhecer ❤️", message: "Meu amor,\n\nChegamos à última cartinha, mas não ao fim das coisas que eu quero te dizer. Eu te amo, e também sinto que me apaixono mais por você a cada dia. Não é só por uma coisa específica: é pelo seu jeito, pelas suas atitudes, pela forma como sente e demonstra carinho, pelo seu lado cuidadoso, pelo seu ciúme às vezes e por tantos detalhes seus, grandes e pequenos, que fazem parte de quem você é.\n\nAté o Romeu faz parte dessas lembranças. Nosso ursinho — nosso filho, como a gente brinca — ficou ainda mais especial porque você colocou seu perfume nele. Eu gosto de abraçá-lo para dormir, sentir seu cheirinho e ter aquela sensação de segurança e aconchego, como se um pedacinho de você estivesse comigo. Pode parecer bobo, mas para mim tem muito significado.\n\nEu amo você por ser você. Não quero que deixe de ser essa mulher que eu conheci, que admiro e que continuo descobrindo. Quero que você cresça, mude no que quiser, realize seus sonhos e continue sendo dona de si. Amar você não significa pedir que fique parada no tempo; significa querer conhecer as versões que ainda vamos descobrir uma da outra.\n\nEu não consigo prometer com certeza tudo o que o futuro vai trazer, mas posso dizer que quero me esforçar por nós. Quero cuidar do que estamos construindo, aprender com os erros e escolher você nas atitudes do dia a dia — não só nas palavras bonitas.\n\nObrigada por fazer parte da minha vida, por cada carinho, cada conversa e cada lembrança que já temos. Ainda há tanta coisa que quero viver com você. E, se depender de mim, quero continuar descobrindo seus detalhes, rindo das nossas bobagens e criando um amor em que nós duas possamos ser felizes e ser quem somos.\n\nEu te amo, meu bem. Hoje, amanhã e em cada dia em que a gente escolher continuar construindo isso juntas. 💗\n\nP.S.: Dê um beijo no Romeu por mim. Quer dizer… ele já dorme abraçadinho comigo, então acho que estamos quites. KKKKKKK. ❤️" }
       },
       quiz: [
         {
@@ -473,7 +478,7 @@
     function openLetter(key) {
       const letter = CONFIG.letters[key];
       if (!letter) return;
-      $("modalTitle").textContent = letter.title;
+      $("modalTitle").textContent = `${letter.emoji} ${letter.day} — ${letter.title}`;
       $("modalMessage").textContent = letter.message;
       $("letterModal").classList.add("open");
       $("modalOk").focus();
