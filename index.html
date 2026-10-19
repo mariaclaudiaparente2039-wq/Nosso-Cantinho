@@ -104,6 +104,25 @@
       .nav-btn { font-size: .62rem; padding-left: 0; padding-right: 0; }
       .nav-btn .nav-icon { font-size: 1.2rem; }
     }
+
+    .proposal-stage { text-align:center; padding: 12px 4px 4px; }
+    .ring-box-trigger { display:block; width:min(100%,320px); margin:14px auto 10px; padding:12px; border:0; background:transparent; cursor:pointer; color:var(--pink-dark); }
+    .ring-box-trigger:focus-visible { outline:3px solid #aa8de8; outline-offset:4px; border-radius:18px; }
+    .ring-box-scene { position:relative; width:220px; height:190px; margin:auto; }
+    .ring-box-base { position:absolute; left:28px; right:28px; bottom:20px; height:84px; border-radius:14px 14px 22px 22px; background:linear-gradient(135deg,#a91f4e,#e54f7a 48%,#8f173d); box-shadow:0 13px 20px #9b24552b; }
+    .ring-box-lid { position:absolute; z-index:2; left:26px; top:44px; width:168px; height:76px; border:3px solid #9b234c; border-radius:15px 15px 8px 8px; background:linear-gradient(145deg,#ed7798,#b62d58 75%); transform-origin:15% 90%; transition:transform .85s cubic-bezier(.2,.75,.2,1), top .85s; box-shadow:0 7px 12px #76204035; }
+    .ring-box-lid:after { content:""; position:absolute; inset:9px; border:1px solid #f9bdce99; border-radius:9px; }
+    .ring-box-cushion { position:absolute; left:42px; right:42px; bottom:30px; height:55px; border-radius:10px; background:linear-gradient(135deg,#fff4f5,#e8c8d0); }
+    .ring-illustration { position:absolute; z-index:3; left:74px; top:42px; width:72px; height:90px; opacity:0; transform:translateY(28px) scale(.72); transition:opacity .7s .25s, transform .7s .25s; }
+    .ring-box-scene.open .ring-box-lid { transform:translate(-7px,-58px) rotate(-28deg); }
+    .ring-box-scene.open .ring-illustration { opacity:1; transform:translateY(-9px) scale(1); }
+    .ring-box-scene.open .ring-box-cushion { box-shadow:0 0 22px #f0b4cc88; }
+    .proposal-hint { color:var(--muted); font-size:.9rem; margin:0 0 12px; }
+    .proposal-options { display:none; margin-top:16px; animation:fadeIn .45s ease; }
+    .proposal-options.revealed { display:grid; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { .ring-box-lid,.ring-illustration,.proposal-options { transition:none; animation:none; } }
+
   </style>
 </head>
 <body>
@@ -406,6 +425,17 @@
         return;
       }
       const q = CONFIG.quiz[quizIndex];
+      if (q.proposal) {
+        area.innerHTML = `<p class="small-note">Pergunta ${quizIndex + 1} de ${CONFIG.quiz.length}</p><div class="proposal-stage"><h3>Preparei uma última surpresa para você… 💗</h3><p class="proposal-hint">Toque na caixinha para abrir seu presente.</p><button type="button" class="ring-box-trigger" id="openRingBox" aria-label="Abrir a caixinha de alianças"><div class="ring-box-scene" id="ringBoxScene"><div class="ring-box-base"></div><div class="ring-box-cushion"></div><svg class="ring-illustration" viewBox="0 0 90 110" role="img" aria-label="Aliança dourada com uma pequena pedra"><defs><linearGradient id="goldRing" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff0a8"/><stop offset=".35" stop-color="#d49a28"/><stop offset=".62" stop-color="#fff0a0"/><stop offset="1" stop-color="#a96b10"/></linearGradient></defs><ellipse cx="45" cy="70" rx="25" ry="31" fill="none" stroke="url(#goldRing)" stroke-width="10"/><ellipse cx="45" cy="70" rx="25" ry="31" fill="none" stroke="#fff0b6" stroke-width="2"/><path d="M36 37 L45 25 L54 37 L45 44 Z" fill="#fff" stroke="#d8c5e9" stroke-width="2"/><path d="M45 25 V44 M36 37 H54" stroke="#fff" stroke-width="1"/></svg><div class="ring-box-lid"></div></div></button><p class="small-note" id="ringBoxCaption">Um detalhe pequeno, com um significado enorme. 💍</p></div><div class="proposal-options quiz-options" id="proposalOptions"><h3>${q.question}</h3>${q.options.map((option, i) => `<button class="quiz-option" data-option="${i}">${String.fromCharCode(65+i)}. ${option}</button>`).join("")}</div>`;
+        $("openRingBox").addEventListener("click", () => {
+          const scene = $("ringBoxScene");
+          if (scene.classList.contains("open")) return;
+          scene.classList.add("open");
+          $("ringBoxCaption").textContent = "Eu queria que esse momento fosse tão especial quanto você. ❤️";
+          window.setTimeout(() => { $("proposalOptions").classList.add("revealed"); $("proposalOptions").scrollIntoView({behavior:"smooth",block:"nearest"}); $("proposalOptions").querySelectorAll(".quiz-option").forEach(button => button.addEventListener("click", () => answerQuestion(Number(button.dataset.option), button))); }, 700);
+        });
+        return;
+      }
       area.innerHTML = `<p class="small-note">Pergunta ${quizIndex + 1} de ${CONFIG.quiz.length}</p><h3>${q.question}</h3><div class="quiz-options">${q.options.map((option, i) => `<button class="quiz-option" data-option="${i}">${String.fromCharCode(65+i)}. ${option}</button>`).join("")}</div>`;
       area.querySelectorAll(".quiz-option").forEach(button => button.addEventListener("click", () => answerQuestion(Number(button.dataset.option), button)));
     }
@@ -413,7 +443,9 @@
       if (quizAnswered) return;
       quizAnswered = true;
       const q = CONFIG.quiz[quizIndex];
-      const buttons = $("quizArea").querySelectorAll(".quiz-option");
+      const buttons = q.proposal
+        ? $("proposalOptions").querySelectorAll(".quiz-option")
+        : $("quizArea").querySelectorAll(".quiz-option");
       buttons.forEach(b => b.disabled = true);
       if (q.proposal) {
         button.classList.add(choice === 2 ? "wrong" : "correct");
