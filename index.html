@@ -226,7 +226,8 @@
           <textarea id="customMessage"></textarea>
         </div>
         <button class="btn btn-primary btn-block" id="saveSettings">Salvar personalização 💗</button>
-        <p class="small-note">Não digite +, espaços ou traços no número do WhatsApp. Exemplo brasileiro: 55 + DDD + número.</p>
+        <button class="btn btn-block" id="shareSettings" style="margin-top:10px;background:#f1edff;color:#6547a5;border:1px solid #d9cdfb">💌 Compartilhar nosso cantinho</button>
+        <p class="small-note">O botão de compartilhar envia suas personalizações junto com o link, para aparecerem também no celular dela. Não digite +, espaços ou traços no número do WhatsApp. Exemplo brasileiro: 55 + DDD + número.</p>
       </div>
     </section>
 
@@ -328,6 +329,59 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
     document.querySelectorAll(".nav-btn").forEach(button => button.addEventListener("click", () => showPage(button.dataset.page)));
+
+    // Importa personalizações recebidas pelo link compartilhado, antes de preencher a tela.
+    function importSharedSettings() {
+      const params = new URLSearchParams(window.location.search);
+      const packed = params.get("cantinho");
+      if (!packed) return;
+      try {
+        const data = JSON.parse(decodeURIComponent(escape(atob(packed))));
+        const allowed = {
+          herName: "herName",
+          startDate: "startDate",
+          meetDate: "meetDate",
+          whatsappNumber: "whatsappNumber",
+          welcomeMessage: "welcomeMessage"
+        };
+        Object.entries(allowed).forEach(([key, storageKey]) => {
+          if (typeof data[key] === "string") safeStore.set(storageKey, data[key]);
+        });
+        history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+      } catch (error) {
+        console.warn("Não foi possível importar as personalizações do link.", error);
+      }
+    }
+
+    async function shareSettings() {
+      // Garante que o que está escrito nos campos seja incluído no link.
+      autoSaveSettings();
+      const data = {
+        herName: $("herName").value.trim() || CONFIG.herName,
+        startDate: $("startDate").value,
+        meetDate: $("meetDate").value,
+        whatsappNumber: $("yourNumber").value.replace(/\D/g, ""),
+        welcomeMessage: $("customMessage").value.trim() || CONFIG.welcomeMessage
+      };
+      const packed = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      const url = new URL(window.location.href);
+      url.search = "";
+      url.searchParams.set("cantinho", packed);
+      const shareData = { title: "Nosso Cantinho 💗", text: "Preparei nosso cantinho com carinho. Abre por este link:", url: url.toString() };
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(url.toString());
+          alert("Link personalizado copiado! Agora é só enviar para ela. 💗");
+        } else {
+          window.prompt("Copie este link e envie para ela:", url.toString());
+        }
+      } catch (error) {
+        if (error && error.name !== "AbortError") window.prompt("Copie este link e envie para ela:", url.toString());
+      }
+    }
+    $("shareSettings").addEventListener("click", shareSettings);
 
     function loadSettings() {
       $("appTitle").textContent = CONFIG.appTitle;
@@ -529,6 +583,7 @@
       $("rouletteResult").innerHTML = `<h3>${activity.title}</h3><p>${activity.description}</p>`;
     });
 
+    importSharedSettings();
     loadSettings();
   </script>
 </body>
